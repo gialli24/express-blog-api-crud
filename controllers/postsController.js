@@ -1,15 +1,24 @@
 let posts = require('../data/posts');
 
 const index = (req, res) => {
-    let filteredPosts = posts;
-
     const tag = req.query.tag;
 
     if (tag) {
-        filteredPosts = posts.filter(post => post.tags.includes(tag));
+        const filteredPosts = posts.filter(post => post.tags.includes(tag));
+
+        if (filteredPosts.length === 0) {
+            res.json({
+                status: 404,
+                message: `Post with tag ${tag} not found`
+            });
+        } else {
+            res.json(filteredPosts);
+        }
+
+    } else {
+        res.json(posts);
     }
 
-    res.json(filteredPosts);
 }
 
 const show = (req, res) => {
@@ -40,14 +49,23 @@ const destroy = (req, res) => {
     const id = parseInt(req.params.id);
 
     const deletedPost = posts.find(p => p.id === id);
-    posts = posts.filter(p => p.id !== id);
 
-    console.log(posts);
+    if (!deletedPost) {
+        res.json({
+            status: 404,
+            message: `Post ${id} not found`
+        });
+    } else {
+        posts = posts.filter(p => p.id !== id);
 
-    res.json({
-        status: 204,
-        message: `Post ${id} deleted`
-    });
+        console.log(posts);
+
+        res.json({
+            status: 204,
+            message: `Post ${id} deleted`
+        });
+    }
+
 }
 
 module.exports = {
