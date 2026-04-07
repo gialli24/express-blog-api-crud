@@ -34,7 +34,12 @@ const destroy = (req, res) => {
     const deletedPost = posts.find(p => p.id === id);
     posts = posts.filter(p => p.id !== id);
 
-    res.json(deletedPost);
+    console.log(posts);
+
+    res.json({
+        status: 204,
+        message: `Post ${id} deleted`
+    });
 }
 
 module.exports = {
