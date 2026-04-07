@@ -1,44 +1,26 @@
 const express = require("express");
 const router = express.Router();
 
-const posts = require('../data/posts');
+const postsController = require('../controllers/postsController');
+
 
 // index
-router.get('/', function (req, res) {
-    res.json(posts);
-});
+router.get('/', postsController.index);
 
 // show
-router.get('/:id', function (req, res) {
-
-    const post = posts.find(post => post.id === parseInt(req.params.id));
-
-    res.json(post);
-});
+router.get('/:id', postsController.show);
 
 // store
-router.post('/', function (req, res) {
-    res.send('Creating post');
-});
+router.post('/', postsController.store);
 
 // update
-router.put('/:id', function (req, res) {
-    res.send('Update post with id ' + req.params.id);
-});
+router.put('/:id', postsController.update);
 
 // modify
-router.patch('/:id', function (req, res) {
-    res.send('Modify post with id ' + req.params.id);
-});
+router.patch('/:id', postsController.modify);
 
 // destroy
-router.delete('/:id', function (req, res) {
-    const idToDelete = parseInt(req.params.id);
-    deletedPost = posts.find(p => p.id === idToDelete);
-    posts = posts.filter(p => p.id !== idToDelete);
-
-    res.json(deletedPost);
-});
+router.delete('/:id', postsController.destroy);
 
 
 module.exports = router;
